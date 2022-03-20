@@ -1,9 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <memory.h>
+#include <malloc.h>
 #include <string.h>
-
-int len = 0;
 
 typedef struct treeNode {
 	char data;
@@ -21,10 +18,36 @@ treeNode *makeRootNode(char data, treeNode* leftNode, treeNode* rightNode) {
 	return root;
 }
 
-treeNode *makeTree(char str[]) {
-	len = strlen(str);
+treeNode *initRootNode(char a, char op, char b) {
+	treeNode *left = makeRootNode(a, NULL, NULL);
+	treeNode *right = makeRootNode(b, NULL, NULL);
+	treeNode *root = makeRootNode(op, left, right);
 
-	char numStack[len / 2];
+	return root;
+}
+
+treeNode *makeTree(char str[]) {
+	treeNode *root = initRootNode(str[0], str[1], str[2]);
+	char last_op = root->data;
+
+	for (int i = 3; i < strlen(str); i++) {
+		char ch = str[i];
+
+		if (ch == '*' || ch == '/' || ch == '+' || ch == '-') {
+			last_op = ch;
+		}
+		else {
+			treeNode *add = makeRootNode(ch, NULL, NULL);
+
+			if (last_op == '*' || last_op == '/') {
+				root->right = makeRootNode(last_op, root->right, add);
+			}
+			else {
+				root = makeRootNode(last_op, root, add);
+			}
+		}
+	}
+	return root;
 }
 
 void preorder(treeNode* root) {
@@ -52,26 +75,19 @@ void postorder(treeNode* root) {
 }
 
 void main() {
-	treeNode *n13 = makeRootNode('G', NULL, NULL);
-	treeNode *n12 = makeRootNode('F', NULL, NULL);
-	treeNode *n11 = makeRootNode('E', NULL, NULL);
-	treeNode *n10 = makeRootNode('D', NULL, NULL);
-	treeNode *n9 = makeRootNode('C', NULL, NULL);
-	treeNode *n8 = makeRootNode('B', NULL, NULL);
-	treeNode *n7 = makeRootNode('A', NULL, NULL);
-	treeNode *n6 = makeRootNode('*', n12, n13);
-	treeNode *n5 = makeRootNode('/', n10, n11);
-	treeNode *n4 = makeRootNode('*', n8, n9);
-	treeNode *n3 = makeRootNode('*', n7, n4);
-	treeNode *n2 = makeRootNode('-', n5, n6);
-	treeNode *n1 = makeRootNode('+', n3, n2);
+	char str[40];
 
-	preorder(n1);
+	printf("╫д ют╥б: ");
+	scanf_s("%s", str, 40);
+
+	treeNode *root = makeTree(str);
+
+	preorder(root);
 	printf("\n");
 
-	inorder(n1);
+	inorder(root);
 	printf("\n");
 
-	postorder(n1);
+	postorder(root);
 	printf("\n");
 }
