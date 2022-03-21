@@ -10,6 +10,12 @@ typedef struct treeNode {
 	struct treeNode *right;
 } treeNode;
 
+treeNode *node_stack[STACK_SIZE];
+char op_stack[STACK_SIZE];
+
+int node_top = -1;
+int op_top = -1;
+
 treeNode *makeRootNode(char data, treeNode* leftNode, treeNode* rightNode) {
 	treeNode* root = (treeNode *)malloc(sizeof(treeNode));
 
@@ -20,87 +26,48 @@ treeNode *makeRootNode(char data, treeNode* leftNode, treeNode* rightNode) {
 	return root;
 }
 
-/*
-treeNode *initRootNode(char a, char op, char b) {
-	treeNode *left = makeRootNode(a, NULL, NULL);
-	treeNode *right = makeRootNode(b, NULL, NULL);
-	treeNode *root = makeRootNode(op, left, right);
-
-	return root;
+int priority(char c) {
+	if (c == '*' || c == '/') {
+		return 0;
+	}
+	return 1;
 }
-*/
+
+void connectNode() {
+	treeNode *right = node_stack[node_top--];
+	treeNode *left = node_stack[node_top--];
+
+	node_stack[++node_top] = makeRootNode(op_stack[op_top--], left, right);
+}
 
 treeNode *makeTree(char str[]) {
-	/*
-	treeNode *root = initRootNode(str[0], str[1], str[2]);
-	char last_op = root->data;
-
-	for (int i = 3; i < strlen(str); i++) {
-		char ch = str[i];
-
-		if (ch == '*' || ch == '/' || ch == '+' || ch == '-') {
-			last_op = ch;
-		}
-		else {
-			treeNode *add = makeRootNode(ch, NULL, NULL);
-
-			if (last_op == '*' || last_op == '/') {
-				root->right = makeRootNode(last_op, root->right, add);
-			}
-			else {
-				root = makeRootNode(last_op, root, add);
-			}
-		}
-	}
-	return root;
-	*/
-
-	treeNode *node_stack[STACK_SIZE];
-	char op_stack[STACK_SIZE];
-
-	int node_top = -1;
-	int op_top = -1;
-
 	for (int i = 0; i < strlen(str); i++) {
-		char ch = str[i];
+		char c = str[i];
 
-		if (ch == '*' || ch == '/' || ch == '(') {
-			op_stack[++op_top] = ch;
+		if (c == '*' || c == '/' || c == '(') {
+			op_stack[++op_top] = c;
 		}
-		else if (ch == '+' || ch == '-') {
-			if (op_top != -1) {
-				char last_op = op_stack[op_top];
-
-				if (last_op == '*' || last_op == '/') {
-					while (op_top > -1) {
-						treeNode *right = node_stack[node_top--];
-						treeNode *left = node_stack[node_top--];
-
-						node_stack[++node_top] = makeRootNode(op_stack[op_top--], left, right);
-					}
+		else if (c == '+' || c == '-') {
+			if (op_top > -1 && priority(c) > priority(op_stack[op_top])) {
+				while (op_top > -1 && op_stack[op_top] != '(') {
+					connectNode();
 				}
 			}
-			op_stack[++op_top] = ch;
+			op_stack[++op_top] = c;
 		}
-		else if (ch == ')') {
+		else if (c == ')') {
 			while (op_stack[op_top] != '(') {
-				treeNode *right = node_stack[node_top--];
-				treeNode *left = node_stack[node_top--];
-
-				node_stack[++node_top] = makeRootNode(op_stack[op_top--], left, right);
+				connectNode();
 			}
 			op_top--;
 		}
 		else {
-			node_stack[++node_top] = makeRootNode(ch, NULL, NULL);
+			node_stack[++node_top] = makeRootNode(c, NULL, NULL);
 		}
 	}
 
 	while (op_top > -1) {
-		treeNode *right = node_stack[node_top--];
-		treeNode *left = node_stack[node_top--];
-
-		node_stack[++node_top] = makeRootNode(op_stack[op_top--], left, right);
+		connectNode();
 	}
 	return node_stack[0];
 }
@@ -137,12 +104,15 @@ void main() {
 
 	treeNode *root = makeTree(str);
 
+	printf("전위: ");
 	preorder(root);
 	printf("\n");
 
+	printf("중위: ");
 	inorder(root);
 	printf("\n");
 
+	printf("후위: ");
 	postorder(root);
 	printf("\n");
 }
