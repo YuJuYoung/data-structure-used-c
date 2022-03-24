@@ -7,7 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "연결큐", "자료구조\�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "데크", "데크\데크.vcxproj", "{58B12315-0395-400F-84AF-F74483973513}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "트리", "트리\트리.vcxproj", "{6666AF92-B967-4A95-BFE9-6398BADA487E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "수식트리", "트리\트리.vcxproj", "{6666AF92-B967-4A95-BFE9-6398BADA487E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "이진 트리 용량 계산", "이진 트리 용량 계산\이진 트리 용량 계산.vcxproj", "{766DEC87-68C0-493D-9170-90366252C4A2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "스레드 이진 트리", "스레드 이진 트리\스레드 이진 트리.vcxproj", "{421E2619-24C5-4D65-A766-E8BD8D78313D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,22 @@ Global
 		{6666AF92-B967-4A95-BFE9-6398BADA487E}.Release|x64.Build.0 = Release|x64
 		{6666AF92-B967-4A95-BFE9-6398BADA487E}.Release|x86.ActiveCfg = Release|Win32
 		{6666AF92-B967-4A95-BFE9-6398BADA487E}.Release|x86.Build.0 = Release|Win32
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Debug|x64.ActiveCfg = Debug|x64
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Debug|x64.Build.0 = Debug|x64
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Debug|x86.ActiveCfg = Debug|Win32
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Debug|x86.Build.0 = Debug|Win32
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Release|x64.ActiveCfg = Release|x64
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Release|x64.Build.0 = Release|x64
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Release|x86.ActiveCfg = Release|Win32
+		{766DEC87-68C0-493D-9170-90366252C4A2}.Release|x86.Build.0 = Release|Win32
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Debug|x64.ActiveCfg = Debug|x64
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Debug|x64.Build.0 = Debug|x64
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Debug|x86.ActiveCfg = Debug|Win32
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Debug|x86.Build.0 = Debug|Win32
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Release|x64.ActiveCfg = Release|x64
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Release|x64.Build.0 = Release|x64
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Release|x86.ActiveCfg = Release|Win32
+		{421E2619-24C5-4D65-A766-E8BD8D78313D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
