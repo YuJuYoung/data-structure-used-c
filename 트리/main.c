@@ -101,6 +101,7 @@ void main() {
 
 	printf("╫д ют╥б: ");
 	scanf_s("%s", str, STACK_SIZE * 2);
+	printf("-----------------------------\n");
 
 	treeNode *root = makeTree(str);
 
