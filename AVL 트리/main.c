@@ -21,182 +21,131 @@ treeNode* RR_rotate(treeNode *parent) {
 	treeNode *child = parent->right;
 	parent->right = child->left;
 	child->left = parent;
+
 	return child;
 }
 
-treeNode* LR_rotate(treeNode *parent) {
-	treeNode *child = parent->left;
-	parent->left = RR_rotate(child);
+treeNode* LR_rotate(treeNode *p) {
+	p->left = RR_rotate(p->left);
 
-	return LL_rotate(parent);
+	return LL_rotate(p);
 }
 
-treeNode* RL_rotate(treeNode *parent) {
-	treeNode *child = parent->right;
-	parent->right = LL_rotate(child);
+treeNode* RL_rotate(treeNode *p) {
+	p->right = LL_rotate(p->right);
 
-	return RR_rotate(parent);
+	return RR_rotate(p);
 }
 
 int getHeight(treeNode *p) {
-	int height = 0;
-
-	if (p != NULL) {
-		height = MAX(getHeight(p->left), getHeight(p->right)) + 1;
-	}
-	return height;
-}
-
-int getBF(treeNode* p) {
-	if (p == NULL) {
+	if (!p) {
 		return 0;
 	}
-	return getHeight(p->left) - getHeight(p->right);
+	return MAX(getHeight(p->left), getHeight(p->right)) + 1;
 }
 
-treeNode* rebalance(treeNode** p) {
-	int BF = getBF(*p);
+int getBF(treeNode *p) {
+	return p ? getHeight(p->left) - getHeight(p->right) : 0;
+}
+
+treeNode* rebalance(treeNode *p) {
+	int BF = getBF(p);
 
 	if (BF > 1) {
-		if (getBF((*p)->left) > 0) {
-			*p = LL_rotate(*p);
+		if (getBF(p->left) > 0) {
+			p = LL_rotate(p);
 		}
 		else {
-			*p = LR_rotate(*p);
+			p = LR_rotate(p);
 		}
 	}
-	else if (BF < -1) {
-		if (getBF((*p)->right) < 0) {
-			*p = RR_rotate(*p);
+	if (BF < -1) {
+		if (getBF(p->right) < 0) {
+			p = RR_rotate(p);
 		}
 		else {
-			*p = RL_rotate(*p);
+			p = RL_rotate(p);
 		}
 	}
-	return *p;
+	return p;
 }
 
-treeNode* insert_AVL_Node(treeNode **root, element x) {
-	if (*root == NULL) {
-		*root = (treeNode *)malloc(sizeof(treeNode));
-		(*root)->key = x;
-		(*root)->left = (*root)->right = NULL;
-	}
-	else if (x < (*root)->key) {
-		(*root)->left = insert_AVL_Node(&((*root)->left), x);
-		*root = rebalance(root);
-	}
-	else if (x > (*root)->key) {
-		(*root)->right = insert_AVL_Node(&((*root)->right), x);
-		*root = rebalance(root);
-	}
-	else {
-		printf("\n같은 키 있음\n");
-		exit(1);
-	}
-	return *root;
-}
-
-treeNode* insert_BST_Node(treeNode *p, element x) {
-	treeNode *newNode;
-
-	if (p == NULL) {
-		newNode = (treeNode *)malloc(sizeof(treeNode));
+treeNode* insert_AVL_Node(treeNode *p, element x) {
+	if (!p) {
+		treeNode *newNode = (treeNode *)malloc(sizeof(treeNode));
 		newNode->key = x;
 		newNode->left = newNode->right = NULL;
 
 		return newNode;
 	}
-	else if (x < p->key) {
-		p->left = insert_BST_Node(p->left, x);
+
+	if (x < p->key) {
+		p->left = insert_AVL_Node(p->left, x);
+		p = rebalance(p);
 	}
 	else if (x > p->key) {
-		p->right = insert_BST_Node(p->right, x);
+		p->right = insert_AVL_Node(p->right, x);
+		p = rebalance(p);
 	}
 	else {
-		printf("\n같은 키 있음\n");
+		printf("이미 있음");
 	}
 	return p;
 }
 
-treeNode* searchTree(treeNode* root, element x) {
-	treeNode* p;
-	int count = 0;
-	p = root;
+void searchTree(treeNode *root, element x) {
+	treeNode *p = root;
+	int count = 1;
 
-	while (p != NULL) {
-		count++;
-
+	while (p && x != p->key) {
 		if (x < p->key) {
 			p = p->left;
-		}
-		else if (x == p->key) {
-			printf("%3d번째 탐색 성공", count);
-			return p;
 		}
 		else {
 			p = p->right;
 		}
+		count++;
 	}
-	printf("%3d번째 탐색 실패", count + 1);
-	return p;
+	printf((p ? "%d번째 성공" : "%d번째 실패"), count);
+	printf("\n");
 }
 
-void displayInorder(treeNode* root) {
+void printTree(treeNode *root) {
 	if (root) {
-		displayInorder(root->left);
-		printf("_%d ", root->key);
-		displayInorder(root->right);
+		printTree(root->left);
+		printf("%d ", root->key);
+		printTree(root->right);
 	}
 }
 
 void main() {
-	treeNode* root_AVL = NULL;
-	treeNode* root_BST = NULL;
+	treeNode *AVL = NULL;
+	int choice, key;
 
-	root_AVL = insert_AVL_Node(&root_AVL, 50);
-	insert_AVL_Node(&root_AVL, 60);
-	insert_AVL_Node(&root_AVL, 70);
-	insert_AVL_Node(&root_AVL, 90);
-	insert_AVL_Node(&root_AVL, 80);
-	insert_AVL_Node(&root_AVL, 75);
-	insert_AVL_Node(&root_AVL, 73);
-	insert_AVL_Node(&root_AVL, 72);
-	insert_AVL_Node(&root_AVL, 78);
+	while (1) {
+		printf("1 삽입 2 탐색 3 트리 출력 4 종료: ");
+		scanf_s("%d", &choice);
 
-	printf("\nAVL 트리 출력\n\n");
-	displayInorder(root_AVL);
-
-	printf("\n\nAVL 트리에서 70 탐색: ");
-	searchTree(root_AVL, 70);
-
-	printf("\n\nAVL 트리에서 72 탐색: ");
-	searchTree(root_AVL, 72);
-
-	printf("\n\nAVL 트리에서 76 탐색: ");
-	searchTree(root_AVL, 76);
-
-	root_BST = insert_BST_Node(root_BST, 50);
-	insert_BST_Node(root_BST, 60);
-	insert_BST_Node(root_BST, 70);
-	insert_BST_Node(root_BST, 90);
-	insert_BST_Node(root_BST, 80);
-	insert_BST_Node(root_BST, 75);
-	insert_BST_Node(root_BST, 73);
-	insert_BST_Node(root_BST, 72);
-	insert_BST_Node(root_BST, 78);
-
-	printf("\nBST 트리 출력\n\n");
-	displayInorder(root_BST);
-
-	printf("\n\nBST 트리에서 70 탐색: ");
-	searchTree(root_BST, 70);
-
-	printf("\n\nBST 트리에서 72 탐색: ");
-	searchTree(root_BST, 72);
-
-	printf("\n\nBST 트리에서 76 탐색: ");
-	searchTree(root_BST, 76);
-
-	getchar();
+		switch (choice)
+		{
+		case 1:
+			printf("수 입력: ");
+			scanf_s("%d", &key);
+			AVL = insert_AVL_Node(AVL, key);
+			break;
+		case 2:
+			printf("수 입력: ");
+			scanf_s("%d", &key);
+			searchTree(AVL, key);
+			break;
+		case 3:
+			printTree(AVL);
+			printf("\n");
+			break;
+		case 4:
+			return;
+		default:
+			break;
+		}
+	}
 }

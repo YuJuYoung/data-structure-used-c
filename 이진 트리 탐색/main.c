@@ -42,7 +42,7 @@ treeNode* insertNode(treeNode *p, element x) {
 	return p;
 }
 
-treeNode* deleteNode(treeNode* root, element x) {
+treeNode* deleteNode(treeNode *root, element x) {
 	treeNode *parent = NULL, *p = root;
 	int isLeft = 0;
 
@@ -121,35 +121,34 @@ void printTree(treeNode* root) {
 
 void main() {
 	treeNode *root = NULL;
-	char selector;
-	int num;
+	int choice, num;
 
 	while (1) {
 		printf("1 삽입 2 삭제 3 키 찾기 4 트리 출력 5 종료: ");
-		scanf_s(" %c", &selector);
+		scanf_s("%d", &choice);
 
-		switch (selector)
+		switch (choice)
 		{
-		case '1':
+		case 1:
 			printf("수 입력: ");
 			scanf_s("%d", &num);
 			root = insertNode(root, num);
 			break;
-		case '2':
+		case 2:
 			printf("수 입력: ");
 			scanf_s("%d", &num);
 			root = deleteNode(root, num);
 			break;
-		case '3':
+		case 3:
 			printf("수 입력: ");
 			scanf_s("%d", &num);
 			searchBST(root, num);
 			break;
-		case '4':
+		case 4:
 			printTree(root);
 			printf("\n");
 			break;
-		case '5':
+		case 5:
 			return;
 		default:
 			break;
