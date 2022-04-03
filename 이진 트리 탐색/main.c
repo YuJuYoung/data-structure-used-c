@@ -9,6 +9,7 @@ typedef struct treeNode {
 
 void searchBST(treeNode* root, element x) {
 	treeNode *p = root;
+	int count = 1;
 
 	while (p && x != p->key) {
 		if (x < p->key) {
@@ -17,8 +18,9 @@ void searchBST(treeNode* root, element x) {
 		else {
 			p = p->right;
 		}
+		count++;
 	}
-	printf(p ? "찾음" : "키 없음");
+	printf(p ? "%d번째 성공" : "%d번째 실패", count);
 	printf("\n");
 }
 
@@ -41,8 +43,7 @@ treeNode* insertNode(treeNode *p, element x) {
 	}
 	return p;
 }
-
-treeNode* deleteNode(treeNode *root, element x) {
+/*treeNode* deleteNode(treeNode *root, element x) {
 	treeNode *parent = NULL, *p = root;
 	int isLeft = 0;
 
@@ -109,6 +110,48 @@ treeNode* deleteNode(treeNode *root, element x) {
 		}
 	}
 	return root;
+}*/
+
+treeNode* deleteNode(treeNode *p, element x) {
+	if (!p) {
+		printf("키 없음\n");
+	}
+	else {
+		if (x < p->key) {
+			p->left = deleteNode(p->left, x);
+		}
+		else if (x > p->key) {
+			p->right = deleteNode(p->right, x);
+		}
+		else {
+			treeNode *old = p;
+
+			if (!p->left && !p->right) {
+				p = NULL;
+			}
+			else if (p->left && p->right) {
+				treeNode *pp = p->left;
+				treeNode *pp_parent = NULL;
+
+				while (pp->right) {
+					pp_parent = pp;
+					pp = pp->right;
+				}
+
+				if (pp_parent) {
+					pp_parent->right = pp->left;
+					pp->left = p->left;
+				}
+				pp->right = p->right;
+				p = pp;
+			}
+			else {
+				p = p->left ? p->left : p->right;
+			}
+			free(old);
+		}
+	}
+	return p;
 }
 
 void printTree(treeNode* root) {
@@ -121,23 +164,26 @@ void printTree(treeNode* root) {
 
 void main() {
 	treeNode *root = NULL;
-	int choice, num;
+	char choice;
+	int num;
 
 	while (1) {
-		printf("1 삽입 2 삭제 3 키 찾기 4 트리 출력 5 종료: ");
-		scanf_s("%d", &choice);
+		printf("\n1 삽입 2 삭제 3 키 찾기 5 종료: ");
+		scanf_s(" %c", &choice);
 
-		switch (choice)
+		switch (choice - '0')
 		{
 		case 1:
 			printf("수 입력: ");
 			scanf_s("%d", &num);
 			root = insertNode(root, num);
+			printTree(root);
 			break;
 		case 2:
 			printf("수 입력: ");
 			scanf_s("%d", &num);
 			root = deleteNode(root, num);
+			printTree(root);
 			break;
 		case 3:
 			printf("수 입력: ");
@@ -145,10 +191,6 @@ void main() {
 			searchBST(root, num);
 			break;
 		case 4:
-			printTree(root);
-			printf("\n");
-			break;
-		case 5:
 			return;
 		default:
 			break;

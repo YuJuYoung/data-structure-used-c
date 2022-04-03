@@ -4,6 +4,7 @@
 #define MAX(a, b) (a > b ? a : b)
 
 typedef int element;
+
 typedef struct treeNode {
 	element key;
 	struct treeNode *left, *right;
@@ -70,31 +71,75 @@ treeNode* rebalance(treeNode *p) {
 	return p;
 }
 
-treeNode* insert_AVL_Node(treeNode *p, element x) {
+treeNode* insertNode(treeNode *p, element x) {
 	if (!p) {
-		treeNode *newNode = (treeNode *)malloc(sizeof(treeNode));
-		newNode->key = x;
-		newNode->left = newNode->right = NULL;
-
-		return newNode;
-	}
-
-	if (x < p->key) {
-		p->left = insert_AVL_Node(p->left, x);
-		p = rebalance(p);
-	}
-	else if (x > p->key) {
-		p->right = insert_AVL_Node(p->right, x);
-		p = rebalance(p);
+		p = (treeNode *)malloc(sizeof(treeNode));
+		p->key = x;
+		p->left = p->right = NULL;
 	}
 	else {
-		printf("이미 있음");
+		if (x < p->key) {
+			p->left = insertNode(p->left, x);
+			p = rebalance(p);
+		}
+		else if (x > p->key) {
+			p->right = insertNode(p->right, x);
+			p = rebalance(p);
+		}
+		else {
+			printf("같은 키 존재\n");
+			exit(1);
+		}
 	}
 	return p;
 }
 
-void searchTree(treeNode *root, element x) {
-	treeNode *p = root;
+treeNode* deleteNode(treeNode *p, element x) {
+	if (!p) {
+		printf("키 없음\n");
+		exit(1);
+	}
+	else {
+		if (x < p->key) {
+			p->left = deleteNode(p->left, x);
+			p = rebalance(p);
+		}
+		else if (x > p->key) {
+			p->right = deleteNode(p->right, x);
+			p = rebalance(p);
+		}
+		else {
+			treeNode *target = p;
+
+			if (!p->left && !p->right) {
+				p = NULL;
+			}
+			else if (p->left && p->right) {
+				treeNode *pp = p->left;
+				treeNode *pp_parent = NULL;
+
+				while (pp->right) {
+					pp_parent = pp;
+					pp = pp->right;
+				}
+
+				if (pp_parent) {
+					pp_parent->right = pp->left;
+					pp->left = p->left;
+				}
+				pp->right = p->right;
+				p = pp;
+			}
+			else {
+				p = p->left ? p->left : p->right;
+			}
+			free(target);
+		}
+	}
+	return p;
+}
+
+void searchTree(treeNode *p, element x) {
 	int count = 1;
 
 	while (p && x != p->key) {
@@ -106,7 +151,7 @@ void searchTree(treeNode *root, element x) {
 		}
 		count++;
 	}
-	printf((p ? "%d번째 성공" : "%d번째 실패"), count);
+	printf(p ? "%d번째 찾음" : "%d번째 실패", count);
 	printf("\n");
 }
 
@@ -119,30 +164,34 @@ void printTree(treeNode *root) {
 }
 
 void main() {
-	treeNode *AVL = NULL;
-	int choice, key;
+	treeNode *root = NULL;
+	char choice;
+	int num;
 
 	while (1) {
-		printf("1 삽입 2 탐색 3 트리 출력 4 종료: ");
-		scanf_s("%d", &choice);
+		printf("\n1 삽입 2 삭제 3 키 찾기 4 종료: ");
+		scanf_s(" %c", &choice);
 
 		switch (choice)
 		{
-		case 1:
+		case '1':
 			printf("수 입력: ");
-			scanf_s("%d", &key);
-			AVL = insert_AVL_Node(AVL, key);
+			scanf_s("%d", &num);
+			root = insertNode(root, num);
+			printTree(root);
 			break;
-		case 2:
+		case '2':
 			printf("수 입력: ");
-			scanf_s("%d", &key);
-			searchTree(AVL, key);
+			scanf_s("%d", &num);
+			root = deleteNode(root, num);
+			printTree(root);
 			break;
-		case 3:
-			printTree(AVL);
-			printf("\n");
+		case '3':
+			printf("수 입력: ");
+			scanf_s("%d", &num);
+			searchTree(root, num);
 			break;
-		case 4:
+		case '4':
 			return;
 		default:
 			break;
