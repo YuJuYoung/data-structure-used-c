@@ -43,74 +43,6 @@ treeNode* insertNode(treeNode *p, element x) {
 	}
 	return p;
 }
-/*treeNode* deleteNode(treeNode *root, element x) {
-	treeNode *parent = NULL, *p = root;
-	int isLeft = 0;
-
-	while (p && p->key != x) {
-		parent = p;
-		
-		if (x < p->key) {
-			p = p->left;
-			isLeft = 1;
-		}
-		else {
-			p = p->right;
-			isLeft = 0;
-		}
-	}
-
-	if (!p) {
-		printf("키 없음\n");
-	}
-	else {
-		treeNode* old = p;
-
-		if (!p->left && !p->right) {
-			p = NULL;
-			free(old);
-		}
-		else if (p->left && p->right) {
-			treeNode *pp = p->left;
-			treeNode *pp_parent = NULL;
-
-			while (pp->right) {
-				parent = pp;
-				pp = pp->right;
-			}
-			p->key = pp->key;
-
-			if (pp_parent) {
-				pp_parent->right = pp->left;
-			}
-			else {
-				p->left = pp->left;
-			}
-			free(pp);
-		}
-		else if (p->left) {
-			p = p->left;
-			free(old);
-		}
-		else {
-			p = p->right;
-			free(old);
-		}
-
-		if (!parent) {
-			root = p;
-		}
-		else {
-			if (isLeft) {
-				parent->left = p;
-			}
-			else {
-				parent->right = p;
-			}
-		}
-	}
-	return root;
-}*/
 
 treeNode* deleteNode(treeNode *p, element x) {
 	if (!p) {
@@ -168,7 +100,7 @@ void main() {
 	int num;
 
 	while (1) {
-		printf("\n1 삽입 2 삭제 3 키 찾기 5 종료: ");
+		printf("\n1 삽입 2 삭제 3 키 찾기 4 종료: ");
 		scanf_s(" %c", &choice);
 
 		switch (choice - '0')
