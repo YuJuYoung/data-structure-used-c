@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "크루스칼", "최소 비�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "프림", "프림\프림.vcxproj", "{9C5885B4-1554-47BF-B843-9031DA83324A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "해싱 검색", "해싱 검색\해싱 검색.vcxproj", "{73F35DC5-F52F-426E-B305-2556D77C9ECF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -151,6 +153,14 @@ Global
 		{9C5885B4-1554-47BF-B843-9031DA83324A}.Release|x64.Build.0 = Release|x64
 		{9C5885B4-1554-47BF-B843-9031DA83324A}.Release|x86.ActiveCfg = Release|Win32
 		{9C5885B4-1554-47BF-B843-9031DA83324A}.Release|x86.Build.0 = Release|Win32
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Debug|x64.ActiveCfg = Debug|x64
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Debug|x64.Build.0 = Debug|x64
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Debug|x86.ActiveCfg = Debug|Win32
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Debug|x86.Build.0 = Debug|Win32
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Release|x64.ActiveCfg = Release|x64
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Release|x64.Build.0 = Release|x64
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Release|x86.ActiveCfg = Release|Win32
+		{73F35DC5-F52F-426E-B305-2556D77C9ECF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
